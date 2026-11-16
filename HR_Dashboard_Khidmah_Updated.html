@@ -1,0 +1,1021 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم الموارد البشرية - شركة خدمة لإدارة المنتجعات السياحية والعمرانية</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- SheetJS (XLSX Import/Export Library) -->
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800&display=swap');
+        body { font-family: 'Tajawal', sans-serif; }
+        
+        @media print {
+            @page {
+                size: A4 portrait;
+                margin: 8mm 10mm;
+            }
+            body {
+                background-color: #ffffff !important;
+                color: #0f172a !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                font-size: 10px !important;
+                line-height: 1.3 !important;
+            }
+            aside, header button, .flex.flex-wrap.items-center.gap-3, button, .hidden-print, #searchInput, select {
+                display: none !important;
+            }
+            main {
+                padding: 0 !important;
+                overflow: visible !important;
+                height: auto !important;
+            }
+            
+            .bg-slate-800, .bg-slate-900 {
+                background-color: #ffffff !important;
+                border: 1px solid #cbd5e1 !important;
+                color: #0f172a !important;
+                box-shadow: none !important;
+            }
+            .bg-slate-950, .bg-slate-900\/80, .bg-slate-900\/50 {
+                background-color: #f8fafc !important;
+                border: 1px solid #e2e8f0 !important;
+                color: #0f172a !important;
+            }
+            text, span, h2, h3, div, p {
+                color: #0f172a !important;
+            }
+            .text-indigo-400, .text-emerald-400, .text-rose-400, .text-amber-400, .text-purple-400, .text-cyan-400 {
+                color: #0f172a !important;
+                font-weight: 800 !important;
+            }
+            
+            header {
+                margin-bottom: 12px !important;
+                padding-bottom: 6px !important;
+                border-bottom: 2px solid #6366f1 !important;
+            }
+            header h2 {
+                font-size: 18px !important;
+                font-weight: 800 !important;
+            }
+            header p {
+                font-size: 10px !important;
+            }
+            
+            .grid.grid-cols-1.md\\:grid-cols-4.lg\\:grid-cols-9 {
+                display: grid !important;
+                grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+                gap: 8px !important;
+                margin-bottom: 12px !important;
+            }
+            .grid.grid-cols-1.md\\:grid-cols-4.lg\\:grid-cols-9 > div {
+                padding: 8px !important;
+                border-radius: 8px !important;
+            }
+            .grid.grid-cols-1.md\\:grid-cols-4.lg\\:grid-cols-9 div.text-xl {
+                font-size: 15px !important;
+                font-weight: 800 !important;
+            }
+            
+            .grid.grid-cols-1.lg\\:grid-cols-2 {
+                display: grid !important;
+                grid-template-columns: 1fr 1fr !important;
+                gap: 12px !important;
+                margin-bottom: 12px !important;
+            }
+            .grid.grid-cols-1.lg\\:grid-cols-2 > div {
+                padding: 12px !important;
+                border-radius: 10px !important;
+            }
+            .h-72 {
+                height: 150px !important;
+            }
+            
+            .shadow-xl {
+                box-shadow: none !important;
+                padding: 12px !important;
+                margin-bottom: 0 !important;
+                border-radius: 10px !important;
+                page-break-after: always !important;
+            }
+            #yearsTurnoverGrid {
+                display: grid !important;
+                grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+                gap: 8px !important;
+                margin-bottom: 8px !important;
+            }
+            #yearsTurnoverGrid > div {
+                padding: 6px 8px !important;
+                border-radius: 6px !important;
+            }
+            .h-64 {
+                height: 140px !important;
+            }
+            canvas {
+                max-width: 100% !important;
+                max-height: 150px !important;
+            }
+
+            .bg-slate-800.rounded-2xl.border.border-slate-700.p-6:last-child {
+                display: block !important;
+                page-break-before: always !important;
+                margin-top: 0 !important;
+                padding: 12px !important;
+            }
+            
+            table {
+                border-collapse: collapse !important;
+                width: 100% !important;
+                font-size: 10px !important;
+            }
+            thead tr {
+                background-color: #f1f5f9 !important;
+            }
+            tr {
+                page-break-inside: avoid;
+            }
+            th, td {
+                border: 1px solid #cbd5e1 !important;
+                color: #0f172a !important;
+                padding: 6px 8px !important;
+                text-align: right !important;
+            }
+            th:last-child, td:last-child {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 min-h-screen">
+    <div class="flex h-screen overflow-hidden">
+        
+        <!-- القائمة الجانبية (Sidebar) -->
+        <aside class="w-64 bg-slate-800 border-l border-slate-700 flex flex-col justify-between">
+            <div>
+                <div class="p-6 border-b border-slate-700 flex items-center gap-3">
+                    <div class="w-10 h-10 rounded-xl bg-indigo-600 flex items-center justify-center text-white text-xl font-bold">HR</div>
+                    <div>
+                        <h1 class="font-bold text-md text-white leading-snug">شركة خدمة لإدارة المنتجعات السياحية والعمرانية</h1>
+                        <p class="text-xs text-indigo-400 mt-0.5">لوحة تحكم الموارد البشرية</p>
+                    </div>
+                </div>
+                <nav class="p-4 space-y-2">
+                    <a href="#" id="navDashboard" onclick="switchView('dashboard')" class="flex items-center gap-3 px-4 py-3 bg-indigo-600/20 text-indigo-400 rounded-xl font-medium border border-indigo-500/30">
+                        <i class="fa-solid fa-chart-pie text-lg"></i> لوحة التحليلات والتأمينات
+                    </a>
+                    <a href="#" id="navEmployees" onclick="switchView('employees')" class="flex items-center gap-3 px-4 py-3 text-slate-400 hover:bg-slate-700/50 rounded-xl transition">
+                        <i class="fa-solid fa-users text-lg"></i> قائمة الموظفين
+                    </a>
+                </nav>
+            </div>
+        </aside>
+
+        <!-- المحتوى الرئيسي -->
+        <main class="flex-1 overflow-y-auto p-8">
+            <!-- Header -->
+            <header class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
+                <div>
+                    <h2 class="text-2xl font-bold text-white">لوحة تحكم إدارة الموظفين - شركة خدمة لإدارة المنتجعات السياحية والعمرانية</h2>
+                    <p class="text-slate-400 text-sm mt-1">متابعة التأمينات الاجتماعية، معدل الدوران السنوي المنفصل (2022 - 2026)، واستيراد/تصدير Excel</p>
+                </div>
+                <div class="flex flex-wrap items-center gap-3">
+                    <input type="file" id="excelFileInput" accept=".xlsx, .xls" onchange="importFromExcel(event)" class="hidden">
+                    
+                    <button onclick="document.getElementById('excelFileInput').click()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 shadow-lg shadow-blue-600/20 transition">
+                        <i class="fa-solid fa-file-import text-lg"></i> استيراد من Excel
+                    </button>
+                    <button onclick="openAddModal()" class="bg-indigo-600 hover:bg-indigo-500 text-white px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 shadow-lg shadow-indigo-600/20 transition">
+                        <i class="fa-solid fa-plus"></i> إضافة موظف
+                    </button>
+                    <button onclick="exportToExcel()" class="bg-emerald-600 hover:bg-emerald-500 text-white px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 shadow-lg shadow-emerald-600/20 transition">
+                        <i class="fa-solid fa-file-excel text-lg"></i> تصدير Excel
+                    </button>
+                    <button onclick="printDashboard()" class="bg-cyan-600 hover:bg-cyan-500 text-white px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 shadow-lg shadow-cyan-600/20 transition">
+                        <i class="fa-solid fa-print text-lg"></i> طباعة التقرير
+                    </button>
+                    <input type="file" id="jsonFileInput" accept=".json" onchange="importBackupJSON(event)" class="hidden">
+                    <button onclick="exportBackupJSON()" class="bg-purple-600 hover:bg-purple-500 text-white px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 shadow-lg shadow-purple-600/20 transition">
+                        <i class="fa-solid fa-cloud-arrow-down text-lg"></i> تصدير ملف الحفظ (Backup)
+                    </button>
+                    <button onclick="document.getElementById('jsonFileInput').click()" class="bg-teal-600 hover:bg-teal-500 text-white px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 shadow-lg shadow-teal-600/20 transition">
+                        <i class="fa-solid fa-cloud-arrow-up text-lg"></i> استرجاع البيانات (Restore)
+                    </button>
+                    <button onclick="saveDataManually()" class="bg-amber-600 hover:bg-amber-500 text-white px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 shadow-lg shadow-amber-600/20 transition">
+                        <i class="fa-solid fa-floppy-disk text-lg"></i> حفظ البيانات
+                    </button>
+                    <button onclick="clearAllData()" class="bg-rose-600/80 hover:bg-rose-600 text-white px-4 py-2.5 rounded-xl text-sm font-semibold flex items-center gap-2 shadow-lg shadow-rose-600/20 transition">
+                        <i class="fa-solid fa-trash-can text-lg"></i> مسح جميع البيانات
+                    </button>
+                </div>
+            </header>
+
+            <!-- Stat Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-9 gap-3 mb-8">
+                <div class="bg-slate-800 p-3.5 rounded-2xl border border-slate-700">
+                    <div class="flex justify-between items-center mb-1.5">
+                        <span class="text-slate-400 text-xs font-medium">إجمالي الموظفين</span>
+                        <div class="w-6 h-6 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-400"><i class="fa-solid fa-users text-xs"></i></div>
+                    </div>
+                    <div id="statTotal" class="text-lg font-bold text-white mb-0.5">0</div>
+                    <span class="text-[10px] text-slate-400 font-medium">القوة العاملة</span>
+                </div>
+
+                <div class="bg-slate-800 p-3.5 rounded-2xl border border-emerald-500/30">
+                    <div class="flex justify-between items-center mb-1.5">
+                        <span class="text-emerald-400 text-xs font-bold">المستمرين فقط</span>
+                        <div class="w-6 h-6 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-400"><i class="fa-solid fa-user-check text-xs"></i></div>
+                    </div>
+                    <div id="statActiveOnly" class="text-lg font-bold text-emerald-400 mb-0.5">0</div>
+                    <span class="text-[10px] text-emerald-400/80 font-medium">على رأس العمل</span>
+                </div>
+
+                <div class="bg-slate-800 p-3.5 rounded-2xl border border-purple-500/30">
+                    <div class="flex justify-between items-center mb-1.5">
+                        <span class="text-purple-300 text-xs font-bold">عدد الكاجوال</span>
+                        <div class="w-6 h-6 rounded-lg bg-purple-500/10 flex items-center justify-center text-purple-400"><i class="fa-solid fa-user-clock text-xs"></i></div>
+                    </div>
+                    <div id="statCasual" class="text-lg font-bold text-purple-400 mb-0.5">0</div>
+                    <span class="text-[10px] text-purple-300/80 font-medium">مؤقت/كاجوال</span>
+                </div>
+                
+                <div class="bg-slate-800 p-3.5 rounded-2xl border border-zinc-600/50 shadow-md">
+                    <div class="flex justify-between items-center mb-1.5">
+                        <span class="text-zinc-300 text-xs font-bold">حالات الوفاة</span>
+                        <div class="w-6 h-6 rounded-lg bg-zinc-700/40 flex items-center justify-center text-zinc-300"><i class="fa-solid fa-cross text-xs"></i></div>
+                    </div>
+                    <div id="statDeceased" class="text-lg font-bold text-zinc-200 mb-0.5">0</div>
+                    <span class="text-[10px] text-zinc-400 font-medium">ذمم منتهية</span>
+                </div>
+
+                <div class="bg-slate-800 p-3.5 rounded-2xl border border-slate-700">
+                    <div class="flex justify-between items-center mb-1.5">
+                        <span class="text-slate-400 text-xs font-medium">مؤمن عليه</span>
+                        <div class="w-6 h-6 rounded-lg bg-emerald-500/10 flex items-center justify-center text-emerald-400"><i class="fa-solid fa-shield-halved text-xs"></i></div>
+                    </div>
+                    <div id="statInsured" class="text-lg font-bold text-white mb-0.5">0</div>
+                    <span id="statInsuredPct" class="text-[10px] text-emerald-400 font-medium">0% تغطية</span>
+                </div>
+
+                <div class="bg-slate-800 p-3.5 rounded-2xl border border-slate-700">
+                    <div class="flex justify-between items-center mb-1.5">
+                        <span class="text-slate-400 text-xs font-medium">غير مؤمن</span>
+                        <div class="w-6 h-6 rounded-lg bg-rose-500/10 flex items-center justify-center text-rose-400"><i class="fa-solid fa-shield-virus text-xs"></i></div>
+                    </div>
+                    <div id="statUninsured" class="text-lg font-bold text-white mb-0.5">0</div>
+                    <span class="text-[10px] text-rose-400 font-medium">تسجيل تأميني</span>
+                </div>
+
+                <div class="bg-slate-800 p-3.5 rounded-2xl border border-slate-700">
+                    <div class="flex justify-between items-center mb-1.5">
+                        <span class="text-slate-400 text-xs font-medium">لا يوجد تأمين</span>
+                        <div class="w-6 h-6 rounded-lg bg-slate-500/10 flex items-center justify-center text-slate-400"><i class="fa-solid fa-ban text-xs"></i></div>
+                    </div>
+                    <div id="statNoInsurance" class="text-lg font-bold text-white mb-0.5">0</div>
+                    <span class="text-[10px] text-slate-400 font-medium">بدون تغطية</span>
+                </div>
+
+                <div class="bg-slate-800 p-3.5 rounded-2xl border border-slate-700">
+                    <div class="flex justify-between items-center mb-1.5">
+                        <span class="text-slate-400 text-xs font-medium">مؤمن انسبايرد</span>
+                        <div class="w-6 h-6 rounded-lg bg-cyan-500/10 flex items-center justify-center text-cyan-400"><i class="fa-solid fa-building-shield text-xs"></i></div>
+                    </div>
+                    <div id="statInspiredInsurance" class="text-lg font-bold text-white mb-0.5">0</div>
+                    <span class="text-[10px] text-cyan-400 font-medium">تأمين المجموعة</span>
+                </div>
+
+                <div class="bg-gradient-to-br from-indigo-900/60 to-slate-800 p-3.5 rounded-2xl border border-indigo-500/40 shadow-lg">
+                    <div class="flex justify-between items-center mb-1.5">
+                        <span class="text-indigo-300 text-xs font-bold">الدوران الإجمالي</span>
+                        <div class="w-6 h-6 rounded-lg bg-indigo-500/20 flex items-center justify-center text-indigo-300"><i class="fa-solid fa-rotate text-xs"></i></div>
+                    </div>
+                    <div id="statTurnover" class="text-lg font-extrabold text-indigo-400 mb-0.5">0%</div>
+                    <span id="statTurnoverStatus" class="text-[10px] font-semibold text-emerald-400">ممتاز</span>
+                </div>
+            </div>
+
+            <!-- Charts Row -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700">
+                    <h3 class="text-lg font-bold text-white mb-4"><i class="fa-solid fa-shield text-indigo-400 ml-2"></i> توزيع الحالة التأمينية</h3>
+                    <div class="h-72 flex items-center justify-center">
+                        <canvas id="insuranceChart"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-slate-800 p-6 rounded-2xl border border-slate-700 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                                <i class="fa-solid fa-chart-line text-indigo-400"></i> مؤشر معدل الدوران الإجمالي
+                            </h3>
+                            <span id="turnoverHeaderBadge" class="bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1 rounded-full text-xs font-bold">معدل ممتاز</span>
+                        </div>
+                        
+                        <div class="bg-slate-900/80 rounded-xl p-4 border border-slate-700/60 mb-4 flex items-center justify-between">
+                            <div>
+                                <span class="text-xs text-slate-400 block mb-1">نسبة الدوران السنوية العامة</span>
+                                <div id="overallTurnoverRate" class="text-3xl font-extrabold text-indigo-400">0%</div>
+                            </div>
+                            <div class="w-12 h-12 rounded-xl bg-indigo-500/20 flex items-center justify-center text-indigo-400 text-2xl">
+                                <i class="fa-solid fa-arrows-rotate"></i>
+                            </div>
+                        </div>
+
+                        <div class="space-y-1.5 mb-4">
+                            <div class="flex justify-between text-xs text-slate-400">
+                                <span>مستوى الاستقرار</span>
+                                <span id="turnoverProgressPct" class="font-bold text-slate-200">0%</span>
+                            </div>
+                            <div class="w-full bg-slate-900 rounded-full h-2.5 overflow-hidden p-0.5 border border-slate-700">
+                                <div id="turnoverProgressBar" class="bg-indigo-500 h-1.5 rounded-full transition-all duration-500" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <div class="grid grid-cols-2 gap-3 text-xs">
+                            <div class="bg-slate-900/50 p-3 rounded-lg border border-slate-700/40">
+                                <span class="text-slate-400 block mb-0.5">إجمالي المغادرين (استقالة/وفاة/انقطاع)</span>
+                                <span id="turnoverDepartedCount" class="font-bold text-rose-400 text-sm">0 موظف</span>
+                            </div>
+                            <div class="bg-slate-900/50 p-3 rounded-lg border border-slate-700/40">
+                                <span class="text-slate-400 block mb-0.5">إجمالي القوة العاملة</span>
+                                <span id="turnoverTotalWorkforce" class="font-bold text-slate-200 text-sm">0 موظف</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-4 pt-3 border-t border-slate-700/60 text-[11px] text-slate-400 flex items-center gap-2">
+                        <i class="fa-solid fa-circle-info text-indigo-400 text-sm"></i>
+                        <span>معادلة الاحتساب: (عدد المغادرين ÷ إجمالي القوة العاملة) × 100</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- قسم تحليل معدل الدوران المنفصل للسنوات (2022 - 2026) -->
+            <div class="bg-slate-800 border border-slate-700 rounded-2xl p-6 mb-8 shadow-xl">
+                <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-4 border-b border-slate-700">
+                    <div>
+                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-calendar-days text-indigo-400"></i> تحليل معدل الدوران السنوي المنفصل (2022 - 2026)
+                        </h3>
+                        <p class="text-xs text-slate-400 mt-1">يُحسب معدل الدوران لكل سنة بشكل منفصل بناءً على تاريخ ترك العمل (استقالة / وفاة / انقطاع) لكل موظف.</p>
+                    </div>
+                </div>
+
+                <div id="yearsTurnoverGrid" class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-8 gap-3 mb-6"></div>
+
+                <div class="h-64 w-full bg-slate-900/80 p-4 rounded-xl border border-slate-700/60">
+                    <canvas id="turnoverYearlyChart"></canvas>
+                </div>
+            </div>
+
+            <!-- جدول البيانات مع الفلترة والبحث السريع -->
+            <div class="bg-slate-800 rounded-2xl border border-slate-700 p-6">
+                <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
+                    <h3 class="text-lg font-bold text-white">قائمة الموظفين والحالات التأمينية</h3>
+                    <div class="flex flex-wrap items-center gap-3 w-full md:w-auto">
+                        <select id="statusFilter" onchange="renderTable()" class="bg-slate-900 border border-slate-700 text-xs rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-indigo-500">
+                            <option value="الكل">جميع حالات العمل</option>
+                            <option value="مستمر">مستمر</option>
+                            <option value="كاجوال">كاجوال</option>
+                            <option value="انقطاع">انقطاع</option>
+                            <option value="استقالة">استقالة</option>
+                            <option value="وفاة">وفاة</option>
+                        </select>
+                        <select id="insuranceFilter" onchange="renderTable()" class="bg-slate-900 border border-slate-700 text-xs rounded-xl px-3 py-2 text-slate-200 focus:outline-none focus:border-indigo-500">
+                            <option value="الكل">جميع الحالات التأمينية</option>
+                            <option value="مؤمن عليه">مؤمن عليه</option>
+                            <option value="غير مؤمن">غير مؤمن</option>
+                            <option value="لا يوجد تأمين">لا يوجد تأمين</option>
+                            <option value="مؤمن بمجموعة انسبايرد">مؤمن بمجموعة انسبايرد</option>
+                        </select>
+
+                        <input type="text" id="searchInput" oninput="renderTable()" placeholder="ابحث برقم الكود أو الاسم أو القسم..." class="bg-slate-900 border border-slate-700 text-sm rounded-xl px-4 py-2 text-slate-200 focus:outline-none focus:border-indigo-500 w-full md:w-72">
+                    </div>
+                </div>
+                <div class="overflow-x-auto">
+                    <table id="employeesTable" class="w-full text-right border-collapse">
+                        <thead>
+                            <tr class="border-b border-slate-700 text-slate-400 text-sm">
+                                <th class="pb-3 px-4">كود الموظف</th>
+                                <th class="pb-3 px-4">اسم الموظف</th>
+                                <th class="pb-3 px-4">القسم</th>
+                                <th class="pb-3 px-4">المسمى الوظيفي</th>
+                                <th class="pb-3 px-4">حالة العمل</th>
+                                <th class="pb-3 px-4">الحالة التأمينية</th>
+                                <th class="pb-3 px-4">تاريخ الانضمام</th>
+                                <th class="pb-3 px-4 text-rose-400">تاريخ الترك (استقالة/وفاة)</th>
+                                <th class="pb-3 px-4 text-center">الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tableBody" class="divide-y divide-slate-700/50 text-sm text-slate-300">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- نافذة الإضافة/التعديل (Modal) -->
+    <div id="employeeModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-sm hidden items-center justify-center z-50 p-4">
+        <div class="bg-slate-800 border border-slate-700 w-full max-w-md rounded-2xl p-6 shadow-2xl relative">
+            <h3 id="modalTitle" class="text-xl font-bold text-white mb-4">إضافة موظف جديد</h3>
+            <form id="employeeForm" onsubmit="handleFormSubmit(event)" class="space-y-4">
+                <input type="hidden" id="editIndex">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">كود الموظف (ID)</label>
+                    <input type="text" id="empCode" required placeholder="مثال: EMP-101" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">اسم الموظف</label>
+                    <input type="text" id="empName" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">القسم</label>
+                        <input type="text" id="empDept" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">المسمى الوظيفي</label>
+                        <input type="text" id="empRole" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">حالة العمل</label>
+                        <select id="empStatus" onchange="toggleResignationField()" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                            <option value="مستمر">مستمر</option>
+                            <option value="كاجوال">كاجوال (يومي/مؤقت)</option>
+                            <option value="انقطاع">انقطاع</option>
+                            <option value="استقالة">استقالة</option>
+                            <option value="وفاة">وفاة</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-400 mb-1">الحالة التأمينية</label>
+                        <select id="empInsurance" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                            <option value="مؤمن عليه">مؤمن عليه</option>
+                            <option value="غير مؤمن">غير مؤمن</option>
+                            <option value="لا يوجد تأمين">لا يوجد تأمين</option>
+                            <option value="مؤمن بمجموعة انسبايرد">مؤمن بمجموعة انسبايرد</option>
+                        </select>
+                    </div>
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-400 mb-1">تاريخ الانضمام</label>
+                    <input type="date" id="empDate" required class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-indigo-500">
+                </div>
+                
+                <div id="resignationField" class="hidden">
+                    <label id="resignationLabel" class="block text-xs font-semibold text-rose-400 mb-1">تاريخ ترك العمل (استقالة / وفاة / انقطاع)</label>
+                    <input type="date" id="empResignationDate" class="w-full bg-slate-900 border border-rose-500/50 rounded-xl px-3 py-2 text-sm text-white focus:outline-none focus:border-rose-500">
+                </div>
+
+                <div class="flex justify-end gap-3 pt-4">
+                    <button type="button" onclick="closeModal()" class="px-4 py-2 bg-slate-700 text-slate-300 rounded-xl text-sm font-semibold hover:bg-slate-600">إلغاء</button>
+                    <button type="submit" class="px-5 py-2 bg-indigo-600 text-white rounded-xl text-sm font-semibold hover:bg-indigo-500">حفظ</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let defaultEmployees = [
+            { code: "EMP-001", name: "أحمد المحمد", dept: "تطوير البرمجيات", role: "مطور واجهات", status: "مستمر", insurance: "مؤمن عليه", date: "2020-01-15", resignationDate: "" },
+            { code: "EMP-002", name: "سارة الخالد", dept: "الموارد البشرية", role: "أخصائي توظيف", status: "استقالة", insurance: "مؤمن عليه", date: "2020-05-10", resignationDate: "2021-06-12" },
+            { code: "EMP-003", name: "خالد العتيبي", dept: "المبيعات", role: "ممثل مبيعات", status: "انقطاع", insurance: "مؤمن بمجموعة انسبايرد", date: "2021-08-20", resignationDate: "2022-10-05" },
+            { code: "EMP-004", name: "محمد علي", dept: "التسويق", role: "مدير حملات", status: "وفاة", insurance: "لا يوجد تأمين", date: "2021-11-01", resignationDate: "2023-03-15" },
+            { code: "EMP-005", name: "فاطمة أحمد", dept: "تطوير البرمجيات", role: "مطور خلفية", status: "مستمر", insurance: "غير مؤمن", date: "2023-03-01", resignationDate: "" },
+            { code: "EMP-006", name: "عمر الفاروق", dept: "المبيعات", role: "مشرف مبيعات", status: "استقالة", insurance: "لا يوجد تأمين", date: "2022-09-15", resignationDate: "2024-07-20" },
+            { code: "EMP-007", name: "محمود حسن", dept: "الخدمات اللوجستية", role: "عامل كاجوال", status: "استقالة", insurance: "غير مؤمن", date: "2024-02-01", resignationDate: "2025-04-10" },
+            { code: "EMP-008", name: "إبراهيم السيد", dept: "الصيانة", role: "فني كاجوال", status: "كاجوال", insurance: "غير مؤمن", date: "2025-03-10", resignationDate: "" }
+        ];
+
+        let storedEmployees = localStorage.getItem('hr_employees_data_v6');
+        let employees = storedEmployees ? JSON.parse(storedEmployees) : defaultEmployees;
+
+        let insuranceChartInstance = null;
+        let yearlyTurnoverChartInstance = null;
+
+        function toggleResignationField() {
+            const status = document.getElementById('empStatus').value;
+            const resField = document.getElementById('resignationField');
+            const resLabel = document.getElementById('resignationLabel');
+            
+            if (status === "استقالة" || status === "انقطاع" || status === "وفاة") {
+                resField.classList.remove('hidden');
+                if (status === "وفاة") {
+                    resLabel.innerText = "تاريخ الوفاة";
+                } else if (status === "استقالة") {
+                    resLabel.innerText = "تاريخ الاستقالة / ترك العمل";
+                } else {
+                    resLabel.innerText = "تاريخ بداية الانقطاع";
+                }
+            } else {
+                resField.classList.add('hidden');
+                document.getElementById('empResignationDate').value = "";
+            }
+        }
+
+        function saveEmployeesToStorage() {
+            localStorage.setItem('hr_employees_data_v6', JSON.stringify(employees));
+        }
+
+        function printDashboard() { 
+            window.print(); 
+        }
+
+        function saveDataManually() {
+            saveEmployeesToStorage();
+            alert("✅ تم حفظ جميع بيانات الموظفين وتواريخ الترك بنجاح في المتصفح!");
+        }
+
+        function clearAllData() {
+            if (confirm("⚠️ تحذير شديد: هل أنت متأكد تماماً من رغبتك في مسح جميع البيانات نهائياً؟")) {
+                if (confirm("تأكيد أخير: لن يمكنك استعادة البيانات بعد الحذف. هل تريد المتابعة؟")) {
+                    employees = [];
+                    localStorage.removeItem('hr_employees_data_v6');
+                    renderTable();
+                    alert("🗑️ تم مسح جميع البيانات بنجاح.");
+                }
+            }
+        }
+
+        function updateYearlyTurnoverStats() {
+            const years = ["2022", "2023", "2024", "2025", "2026"];
+            const grid = document.getElementById('yearsTurnoverGrid');
+            grid.innerHTML = "";
+
+            const labels = [];
+            const turnoverRates = [];
+
+            years.forEach(yr => {
+                const activeAtYearEnd = employees.filter(e => {
+                    const joinYr = e.date ? e.date.substring(0, 4) : "2026";
+                    if (joinYr > yr) return false; 
+                    
+                    if (e.status === "استقالة" || e.status === "انقطاع" || e.status === "وفاة") {
+                        if (!e.resignationDate || String(e.resignationDate).trim() === "") return true; 
+                        const resYr = String(e.resignationDate).trim().substring(0, 4);
+                        return resYr > yr; 
+                    }
+                    return true; 
+                }).length;
+
+                const departedInYear = employees.filter(e => {
+                    if (e.status !== "استقالة" && e.status !== "انقطاع" && e.status !== "وفاة") return false;
+                    if (!e.resignationDate || String(e.resignationDate).trim() === "") return false; 
+                    const resYr = String(e.resignationDate).trim().substring(0, 4);
+                    return resYr === yr;
+                }).length;
+
+                const rate = activeAtYearEnd > 0 ? parseFloat(((departedInYear / activeAtYearEnd) * 100).toFixed(1)) : 0;
+                
+                labels.push(yr);
+                turnoverRates.push(rate);
+
+                let badgeColor = "text-emerald-400";
+                if (rate > 10 && rate <= 20) badgeColor = "text-amber-400";
+                if (rate > 20) badgeColor = "text-rose-400";
+
+                grid.innerHTML += `
+                    <div class="bg-slate-900 p-3 rounded-xl border border-slate-700/80 text-center shadow-md">
+                        <span class="text-xs text-slate-400 font-bold block mb-1">عام ${yr}</span>
+                        <div class="text-lg font-extrabold ${badgeColor}">${rate}%</div>
+                        <div class="text-[10px] text-slate-400 mt-1">${departedInYear} مغادر</div>
+                        <div class="text-[9px] text-slate-500">من ${activeAtYearEnd} مستمر بنهاية العام</div>
+                    </div>
+                `;
+            });
+
+            if (yearlyTurnoverChartInstance) yearlyTurnoverChartInstance.destroy();
+            const ctx2 = document.getElementById('turnoverYearlyChart').getContext('2d');
+            yearlyTurnoverChartInstance = new Chart(ctx2, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'معدل الدوران السنوي (%)',
+                        data: turnoverRates,
+                        borderColor: '#818cf8',
+                        backgroundColor: 'rgba(99, 102, 241, 0.15)',
+                        borderWidth: 2,
+                        fill: true,
+                        tension: 0.35,
+                        pointRadius: 5,
+                        pointBackgroundColor: '#6366f1'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { beginAtZero: true, grid: { color: '#334155' }, ticks: { color: '#94a3b8', font: { family: 'Tajawal' } } },
+                        x: { grid: { color: '#334155' }, ticks: { color: '#94a3b8', font: { family: 'Tajawal' } } }
+                    }
+                }
+            });
+        }
+
+        function updateStatsAndChart() {
+            const total = employees.length;
+            const activeOnly = employees.filter(e => e.status === "مستمر").length;
+            const casualCount = employees.filter(e => e.status === "كاجوال").length;
+            const deceasedCount = employees.filter(e => e.status === "وفاة").length;
+            const absent = employees.filter(e => e.status === "انقطاع").length;
+            const resigned = employees.filter(e => e.status === "استقالة").length;
+            const departed = absent + resigned + deceasedCount;
+
+            const insured = employees.filter(e => e.insurance === "مؤمن عليه").length;
+            const uninsured = employees.filter(e => e.insurance === "غير مؤمن").length;
+            const noInsurance = employees.filter(e => e.insurance === "لا يوجد تأمين").length;
+            const inspiredInsurance = employees.filter(e => e.insurance === "مؤمن بمجموعة انسبايرد").length;
+
+            
+            // معدل الدوران السنوي العام كمتوسط معدلات الأعوام (2022 - 2026)
+            const yearsList = ["2022", "2023", "2024", "2025", "2026"];
+            let sumRates = 0;
+            yearsList.forEach(yr => {
+                const activeAtYrEnd = employees.filter(e => {
+                    const joinYr = e.date ? e.date.substring(0, 4) : "2026";
+                    if (joinYr > yr) return false;
+                    if (e.status === "استقالة" || e.status === "انقطاع" || e.status === "وفاة") {
+                        if (!e.resignationDate || String(e.resignationDate).trim() === "") return true;
+                        const resYr = String(e.resignationDate).trim().substring(0, 4);
+                        return resYr > yr;
+                    }
+                    return true;
+                }).length;
+                const depInYr = employees.filter(e => {
+                    if (e.status !== "استقالة" && e.status !== "انقطاع" && e.status !== "وفاة") return false;
+                    if (!e.resignationDate || String(e.resignationDate).trim() === "") return false;
+                    const resYr = String(e.resignationDate).trim().substring(0, 4);
+                    return resYr === yr;
+                }).length;
+                if (activeAtYrEnd > 0) {
+                    sumRates += (depInYr / activeAtYrEnd) * 100;
+                }
+            });
+            const turnoverRate = parseFloat((sumRates / yearsList.length).toFixed(1));
+
+            const insuredPct = total > 0 ? Math.round(((insured + inspiredInsurance) / total) * 100) : 0;
+
+            document.getElementById('statTotal').innerText = total;
+            document.getElementById('statActiveOnly').innerText = activeOnly;
+            document.getElementById('statCasual').innerText = casualCount;
+            document.getElementById('statDeceased').innerText = deceasedCount;
+            document.getElementById('statInsured').innerText = insured;
+            document.getElementById('statUninsured').innerText = uninsured;
+            document.getElementById('statNoInsurance').innerText = noInsurance;
+            document.getElementById('statInspiredInsurance').innerText = inspiredInsurance;
+            document.getElementById('statTurnover').innerText = `${turnoverRate}%`;
+            document.getElementById('statInsuredPct').innerText = `${insuredPct}% تغطية`;
+
+            document.getElementById('overallTurnoverRate').innerText = `${turnoverRate}%`;
+            document.getElementById('turnoverDepartedCount').innerText = `${departed} موظف`;
+            document.getElementById('turnoverTotalWorkforce').innerText = `${total} موظف`;
+            document.getElementById('turnoverProgressPct').innerText = `${turnoverRate}%`;
+
+            const progressBar = document.getElementById('turnoverProgressBar');
+            const headerBadge = document.getElementById('turnoverHeaderBadge');
+            const turnoverElem = document.getElementById('statTurnoverStatus');
+
+            progressBar.style.width = `${Math.min(turnoverRate, 100)}%`;
+
+            if (turnoverRate <= 10) {
+                turnoverElem.innerText = "معدل ممتاز (منخفض)";
+                turnoverElem.className = "text-xs font-semibold text-emerald-400";
+                headerBadge.innerText = "معدل ممتاز";
+                headerBadge.className = "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 px-3 py-1 rounded-full text-xs font-bold";
+                progressBar.className = "bg-emerald-500 h-1.5 rounded-full transition-all duration-500";
+            } else if (turnoverRate <= 20) {
+                turnoverElem.innerText = "معدل متوسط (مقبول)";
+                turnoverElem.className = "text-xs font-semibold text-amber-400";
+                headerBadge.innerText = "معدل متوسط";
+                headerBadge.className = "bg-amber-500/10 text-amber-400 border border-amber-500/20 px-3 py-1 rounded-full text-xs font-bold";
+                progressBar.className = "bg-amber-500 h-1.5 rounded-full transition-all duration-500";
+            } else {
+                turnoverElem.innerText = "معدل مرتفع (تحذير)";
+                turnoverElem.className = "text-xs font-semibold text-rose-400";
+                headerBadge.innerText = "معدل مرتفع";
+                headerBadge.className = "bg-rose-500/10 text-rose-400 border border-rose-500/20 px-3 py-1 rounded-full text-xs font-bold";
+                progressBar.className = "bg-rose-500 h-1.5 rounded-full transition-all duration-500";
+            }
+
+            if (insuranceChartInstance) insuranceChartInstance.destroy();
+            const ctx1 = document.getElementById('insuranceChart').getContext('2d');
+            insuranceChartInstance = new Chart(ctx1, {
+                type: 'doughnut',
+                data: {
+                    labels: ['مؤمن عليه', 'غير مؤمن', 'لا يوجد تأمين', 'مؤمن بمجموعة انسبايرد'],
+                    datasets: [{
+                        data: [insured, uninsured, noInsurance, inspiredInsurance],
+                        backgroundColor: ['#10b981', '#f43f5e', '#64748b', '#06b6d4'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    plugins: { legend: { labels: { color: '#94a3b8', font: { family: 'Tajawal' } } } },
+                    responsive: true,
+                    maintainAspectRatio: false
+                }
+            });
+
+            updateYearlyTurnoverStats();
+        }
+
+        function formatDate(dateStr) {
+            if (!dateStr) return '';
+            const parts = dateStr.split(/[-/]/);
+            if (parts.length === 3) {
+                if (parts[0].length === 4) {
+                    return `${parts[2].padStart(2, '0')}/${parts[1].padStart(2, '0')}/${parts[0]}`;
+                }
+            }
+            return dateStr;
+        }
+
+        function renderTable() {
+            const search = document.getElementById('searchInput').value.toLowerCase().trim();
+            const statusFilter = document.getElementById('statusFilter') ? document.getElementById('statusFilter').value : "الكل";
+            const insuranceFilter = document.getElementById('insuranceFilter').value;
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+
+            employees.forEach((emp, index) => {
+                const codeMatch = emp.code.toLowerCase().includes(search);
+                const nameMatch = emp.name.toLowerCase().includes(search);
+                const deptMatch = emp.dept.toLowerCase().includes(search);
+                const statusMatch = (statusFilter === "الكل") || (emp.status === statusFilter);
+                const insuranceMatch = (insuranceFilter === "الكل") || (emp.insurance === insuranceFilter);
+
+                if ((codeMatch || nameMatch || deptMatch) && statusMatch && insuranceMatch) {
+                    let workBadgeClass = "bg-emerald-500/10 text-emerald-400";
+                    if (emp.status === "كاجوال") workBadgeClass = "bg-purple-500/10 text-purple-400 border border-purple-500/20";
+                    if (emp.status === "انقطاع") workBadgeClass = "bg-amber-500/10 text-amber-400";
+                    if (emp.status === "استقالة") workBadgeClass = "bg-rose-500/10 text-rose-400";
+                    if (emp.status === "وفاة") workBadgeClass = "bg-zinc-700 text-zinc-300 border border-zinc-500";
+
+                    let insBadgeClass = "bg-emerald-500/10 text-emerald-400 border border-emerald-500/20";
+                    if (emp.insurance === "غير مؤمن") insBadgeClass = "bg-rose-500/10 text-rose-400 border border-rose-500/20";
+                    if (emp.insurance === "لا يوجد تأمين") insBadgeClass = "bg-slate-700 text-slate-400 border border-slate-600";
+                    if (emp.insurance === "مؤمن بمجموعة انسبايرد") insBadgeClass = "bg-cyan-500/10 text-cyan-400 border border-cyan-500/20";
+
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td class="py-3 px-4 font-mono font-bold text-indigo-400 text-xs">${emp.code}</td>
+                        <td class="py-3 px-4 font-medium text-white">${emp.name}</td>
+                        <td class="py-3 px-4">${emp.dept}</td>
+                        <td class="py-3 px-4">${emp.role}</td>
+                        <td class="py-3 px-4"><span class="${workBadgeClass} px-3 py-1 rounded-full text-xs font-semibold">${emp.status}</span></td>
+                        <td class="py-3 px-4"><span class="${insBadgeClass} px-3 py-1 rounded-full text-xs font-semibold">${emp.insurance}</span></td>
+                        <td class="py-3 px-4 font-mono text-xs text-slate-300" dir="ltr">${formatDate(emp.date)}</td>
+                        <td class="py-3 px-4 font-mono text-xs text-rose-400 font-semibold" dir="ltr">${formatDate(emp.resignationDate) || '-'}</td>
+                        <td class="py-3 px-4 text-center">
+                            <button onclick="openEditModal(${index})" class="text-indigo-400 hover:text-indigo-300 mx-1 p-1"><i class="fa-solid fa-pen-to-square"></i></button>
+                            <button onclick="deleteEmployee(${index})" class="text-rose-400 hover:text-rose-300 mx-1 p-1"><i class="fa-solid fa-trash"></i></button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                }
+            });
+
+            updateStatsAndChart();
+        }
+
+        function parseExcelDate(excelDate) {
+            if (!excelDate) return "";
+            if (typeof excelDate === 'number') {
+                const dateObj = new Date(Math.round((excelDate - 25569) * 86400 * 1000));
+                return dateObj.toISOString().split('T')[0];
+            }
+            return String(excelDate);
+        }
+
+        function importFromExcel(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array', cellDates: true });
+
+                    const firstSheetName = workbook.SheetNames[0];
+                    const worksheet = workbook.Sheets[firstSheetName];
+                    const jsonData = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+
+                    if (jsonData.length === 0) {
+                        alert("الملف المرفوع فارغ أو غير صالح!");
+                        return;
+                    }
+
+                    let importedCount = 0;
+                    jsonData.forEach((row) => {
+                        const nameKey = Object.keys(row).find(k => k.trim().includes('اسم') || k.trim().toLowerCase().includes('name'));
+                        const name = nameKey ? row[nameKey] : (row['اسم الموظف'] || row['الاسم'] || row['Name']);
+
+                        if (name && String(name).trim() !== '') {
+                            const codeKey = Object.keys(row).find(k => k.trim().includes('كود') || k.trim().toLowerCase().includes('id') || k.trim().includes('رقم'));
+                            const deptKey = Object.keys(row).find(k => k.trim().includes('قسم') || k.trim().toLowerCase().includes('dept'));
+                            const roleKey = Object.keys(row).find(k => k.trim().includes('مسمى') || k.trim().includes('وظي') || k.trim().toLowerCase().includes('role'));
+                            const statusKey = Object.keys(row).find(k => k.trim().includes('حالة العمل') || k.trim().includes('الحالة'));
+                            const insKey = Object.keys(row).find(k => k.trim().includes('تأمين') || k.trim().toLowerCase().includes('insurance'));
+                            const dateKey = Object.keys(row).find(k => (k.trim().includes('تاريخ') && !k.trim().includes('استقال') && !k.trim().includes('ترك')) || k.trim().toLowerCase().includes('join'));
+                            const resDateKey = Object.keys(row).find(k => k.trim().includes('استقالة') || k.trim().includes('ترك') || k.trim().includes('وفاة') || k.trim().toLowerCase().includes('resign'));
+
+                            const code = codeKey && row[codeKey] ? String(row[codeKey]) : `EMP-${Math.floor(100 + Math.random() * 900)}`;
+                            const dept = deptKey && row[deptKey] ? String(row[deptKey]) : 'عام';
+                            const role = roleKey && row[roleKey] ? String(row[roleKey]) : 'موظف';
+                            
+                            let rawStatus = statusKey && row[statusKey] ? String(row[statusKey]) : 'مستمر';
+                            let status = 'مستمر';
+                            if (rawStatus.includes('كاجوال') || rawStatus.includes('يومي') || rawStatus.includes('مؤقت')) status = 'كاجوال';
+                            else if (rawStatus.includes('انقطاع') || rawStatus.includes('غائب')) status = 'انقطاع';
+                            else if (rawStatus.includes('استقال') || rawStatus.includes('مستقيل')) status = 'استقالة';
+                            else if (rawStatus.includes('وفاة') || rawStatus.includes('متوفي')) status = 'وفاة';
+
+                            let rawIns = insKey && row[insKey] ? String(row[insKey]) : 'غير مؤمن';
+                            let insurance = 'غير مؤمن';
+                            if (rawIns.includes('انسبايرد') || rawIns.includes('inspired')) insurance = 'مؤمن بمجموعة انسبايرد';
+                            else if (rawIns.includes('لا يوجد')) insurance = 'لا يوجد تأمين';
+                            else if (rawIns.includes('مؤمن') && !rawIns.includes('غير')) insurance = 'مؤمن عليه';
+
+                            let dateVal = dateKey && row[dateKey] ? row[dateKey] : new Date().toISOString().split('T')[0];
+                            dateVal = (dateVal instanceof Date) ? dateVal.toISOString().split('T')[0] : parseExcelDate(dateVal);
+
+                            let resDateVal = resDateKey && row[resDateKey] ? row[resDateKey] : "";
+                            if (resDateVal) {
+                                resDateVal = (resDateVal instanceof Date) ? resDateVal.toISOString().split('T')[0] : parseExcelDate(resDateVal);
+                            }
+
+                            employees.push({
+                                code: code,
+                                name: String(name).trim(),
+                                dept: dept,
+                                role: role,
+                                status: status,
+                                insurance: insurance,
+                                date: dateVal,
+                                resignationDate: resDateVal
+                            });
+                            importedCount++;
+                        }
+                    });
+
+                    if (importedCount > 0) {
+                        saveEmployeesToStorage();
+                        alert(`تم استيراد ${importedCount} موظف بنجاح وحفظ البيانات وتحديث التحليلات السنوية!`);
+                        renderTable();
+                    } else {
+                        alert("لم يتم العثور على أعمدة موظفين صالحة في الملف.");
+                    }
+                } catch (err) {
+                    alert("حدث خطأ أثناء قراءة ملف Excel.");
+                    console.error(err);
+                }
+                event.target.value = '';
+            };
+
+            reader.readAsArrayBuffer(file);
+        }
+
+        function openAddModal() {
+            document.getElementById('modalTitle').innerText = "إضافة موظف جديد";
+            document.getElementById('editIndex').value = "";
+            document.getElementById('employeeForm').reset();
+            document.getElementById('empCode').value = `EMP-00${employees.length + 1}`;
+            toggleResignationField();
+            document.getElementById('employeeModal').classList.remove('hidden');
+            document.getElementById('employeeModal').classList.add('flex');
+        }
+
+        function openEditModal(index) {
+            const emp = employees[index];
+            document.getElementById('modalTitle').innerText = "تعديل بيانات الموظف";
+            document.getElementById('editIndex').value = index;
+            document.getElementById('empCode').value = emp.code;
+            document.getElementById('empName').value = emp.name;
+            document.getElementById('empDept').value = emp.dept;
+            document.getElementById('empRole').value = emp.role;
+            document.getElementById('empStatus').value = emp.status;
+            document.getElementById('empInsurance').value = emp.insurance;
+            document.getElementById('empDate').value = emp.date;
+            document.getElementById('empResignationDate').value = emp.resignationDate || "";
+            toggleResignationField();
+            document.getElementById('employeeModal').classList.remove('hidden');
+            document.getElementById('employeeModal').classList.add('flex');
+        }
+
+        function closeModal() {
+            document.getElementById('employeeModal').classList.add('hidden');
+            document.getElementById('employeeModal').classList.remove('flex');
+        }
+
+        function handleFormSubmit(e) {
+            e.preventDefault();
+            const index = document.getElementById('editIndex').value;
+            const codeInput = document.getElementById('empCode').value.trim();
+
+            const existingIndex = employees.findIndex(emp => emp.code.toLowerCase() === codeInput.toLowerCase());
+            if (existingIndex !== -1 && (index === "" || parseInt(index) !== existingIndex)) {
+                alert(`⚠️ خطأ: كود الموظف (${codeInput}) مسجل مسبقاً لموظف آخر!`);
+                return;
+            }
+
+            const newEmp = {
+                code: codeInput,
+                name: document.getElementById('empName').value,
+                dept: document.getElementById('empDept').value,
+                role: document.getElementById('empRole').value,
+                status: document.getElementById('empStatus').value,
+                insurance: document.getElementById('empInsurance').value,
+                date: document.getElementById('empDate').value,
+                resignationDate: document.getElementById('empResignationDate').value
+            };
+
+            if (index === "") {
+                employees.push(newEmp);
+            } else {
+                employees[index] = newEmp;
+            }
+
+            saveEmployeesToStorage();
+            closeModal();
+            renderTable();
+        }
+
+        function deleteEmployee(index) {
+            if (confirm("هل أنت متأكد من حذف هذا الموظف؟")) {
+                employees.splice(index, 1);
+                saveEmployeesToStorage();
+                renderTable();
+            }
+        }
+
+        function exportToExcel() {
+            const dataToExport = employees.map((emp) => ({
+                "كود الموظف": emp.code,
+                "اسم الموظف": emp.name,
+                "القسم": emp.dept,
+                "المسمى الوظيفي": emp.role,
+                "حالة العمل": emp.status,
+                "الحالة التأمينية": emp.insurance,
+                "تاريخ الانضمام": formatDate(emp.date),
+                "تاريخ الترك (استقالة/وفاة)": formatDate(emp.resignationDate)
+            }));
+            
+            const workbook = XLSX.utils.book_new();
+            const worksheet = XLSX.utils.json_to_sheet(dataToExport);
+            XLSX.utils.book_append_sheet(workbook, worksheet, "تقرير الموظفين والتأمينات");
+            XLSX.writeFile(workbook, "HR_Turnover_Report_2020_2026.xlsx");
+        }
+
+        function exportBackupJSON() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(employees, null, 2));
+            const downloadAnchor = document.createElement('a');
+            downloadAnchor.setAttribute("href", dataStr);
+            downloadAnchor.setAttribute("download", `HR_Dashboard_Data_Backup_${new Date().toISOString().split('T')[0]}.json`);
+            document.body.appendChild(downloadAnchor);
+            downloadAnchor.click();
+            downloadAnchor.remove();
+        }
+
+        function importBackupJSON(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                try {
+                    const importedData = JSON.parse(e.target.result);
+                    if (Array.isArray(importedData)) {
+                        employees = importedData;
+                        saveEmployeesToStorage();
+                        renderTable();
+                        alert("✅ تم استرجاع البيانات وتحديث اللوحة بنجاح إلى آخر وضع مسبوق!");
+                    } else {
+                        alert("⚠️ ملف الحفظ غير صالح أو صيغته غير صحيحة!");
+                    }
+                } catch (err) {
+                    alert("⚠️ حدث خطأ أثناء فتح ملف الحفظ.");
+                    console.error(err);
+                }
+                event.target.value = '';
+            };
+            reader.readAsText(file);
+        }
+
+        renderTable();
+    </script>
+</body>
+</html>
